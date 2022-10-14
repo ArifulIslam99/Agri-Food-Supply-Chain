@@ -4,7 +4,7 @@ import Info from './Info';
 
 const Home = () => {
     return (
-        <div className='px-12'>
+        <div>
             <Banner></Banner>
             <Info></Info>
         </div>
