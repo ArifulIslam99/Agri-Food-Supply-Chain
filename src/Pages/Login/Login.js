@@ -31,6 +31,29 @@ const Login = () => {
 
     }
 
+    if (signInWithGoogle) {
+
+        if (googleUser) {
+            const name = googleUser?.user?.displayName;
+            const email = googleUser?.user?.email;
+            const currentUser = { email: email, name: name, role: "producer" };
+            fetch(`http://localhost:5000/user/${email}`, {
+                method: "PUT",
+                headers: {
+                    "content-type": "application/json"
+                },
+                body: JSON.stringify(currentUser)
+            })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data)
+                })
+
+            navigate("/")
+        }
+
+    }
+
     let from = location.state?.from?.pathname || "/";
     if(user || googleUser) {
         navigate(from, {replace: true})

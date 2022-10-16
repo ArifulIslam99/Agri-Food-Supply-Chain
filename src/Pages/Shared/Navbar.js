@@ -18,7 +18,10 @@ const Navbar = () => {
         <li><Link to="/products">New</Link></li>
         <li><Link to="/logistics">Logistics</Link></li>
         <li><Link to="/about">About Us</Link></li>
-        <li>{user ? <div> <small className='font-bold text-orange-400'>{user.displayName.split(" ")} </small> <button onClick={logout} className="btn btn-ghost text-red-800">Logout</button> </div> : <Link to="/login">Login</Link>}</li>
+        {
+            user && <li><Link to="/dashboard">Dashboard</Link></li>
+        }
+        <li>{user ? <div> <button onClick={logout} className="btn btn-ghost text-red-800">Logout</button> </div> : <Link to="/login">Login</Link>}</li>
 
     </>
     return (
@@ -36,6 +39,8 @@ const Navbar = () => {
                     <a className="btn btn-ghost normal-case text-xl"> FoodChain</a>
                 </div>
               
+                <div>{
+                    user && <p className='font-bold text-orange-400'>{user.email} </p> }</div>
                 <div className="navbar-end hidden lg:flex">
                     <ul className="menu menu-horizontal p-0">
                         {menuItems}

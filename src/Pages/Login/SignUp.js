@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useCreateUserWithEmailAndPassword, useSignInWithGoogle, useUpdateProfile } from "react-firebase-hooks/auth";
 import auth from '../../firebase.init';
 import { useForm } from "react-hook-form";
 import loginbg from "../../images/tomato.jpeg"
 import { Link, useNavigate } from 'react-router-dom';
+import useToken from '../../hooks/useToken';
 const SignUp = () => {
 
     const loginStyle = {
@@ -19,15 +20,38 @@ const SignUp = () => {
         user,
         loading,
         error,
-      ] = useCreateUserWithEmailAndPassword(auth);
+    ] = useCreateUserWithEmailAndPassword(auth);
 
+
+    if (signInWithGoogle) {
+
+        if (googleUser) {
+            const name = googleUser?.user?.displayName;
+            const email = googleUser?.user?.email;
+            const currentUser = { email: email, name: name, role: "producer" };
+            fetch(`http://localhost:5000/user/${email}`, {
+                method: "PUT",
+                headers: {
+                    "content-type": "application/json"
+                },
+                body: JSON.stringify(currentUser)
+            })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data)
+                })
+
+            navigate("/")
+        }
+
+    }
     const { register, formState: { errors }, handleSubmit } = useForm();
     if (loading || googleLoading || updating) {
         return <div className="flex justify-center items-center h-screen">
-        <div className="spinner-grow inline-block w-8 h-8 bg-current rounded-full opacity-0" role="status">
-          <span className="visually-hidden">Loading...</span>
+            <div className="spinner-grow inline-block w-8 h-8 bg-current rounded-full opacity-0" role="status">
+                <span className="visually-hidden">Loading...</span>
+            </div>
         </div>
-      </div>
 
     }
     let signInError;
@@ -35,11 +59,31 @@ const SignUp = () => {
     if (error || googleError || UpdateError) {
         signInError = <p className='text-red-600 text-center'><small>{error?.message || googleError?.message}</small> </p>
     }
+
+
     const onSubmit = async data => {
-       await  createUserWithEmailAndPassword(data.email, data.password);
-       await updateProfile({ displayName: data.name });
-       navigate("/about")
+        const email = data.email;
+        const name = data.name;
+        const currentUser = { email: email, name: name, role: "producer" };
+        fetch(`http://localhost:5000/user/${email}`, {
+            method: "PUT",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify(currentUser)
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data)
+            })
+
+        await createUserWithEmailAndPassword(data.email, data.password);
+        await updateProfile({ displayName: data.name });
+
+        navigate("/")
     };
+
+
 
     return (
         <div className='flex h-screen justify-center items-center' style={loginStyle}>
