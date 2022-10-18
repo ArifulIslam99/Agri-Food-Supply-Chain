@@ -4,6 +4,7 @@ import auth from '../../firebase.init';
 import { useForm } from "react-hook-form";
 import loginbg from "../../images/tomato.jpeg"
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const Login = () => {
 
@@ -33,10 +34,11 @@ const Login = () => {
 
     if (signInWithGoogle) {
 
+
         if (googleUser) {
             const name = googleUser?.user?.displayName;
             const email = googleUser?.user?.email;
-            const currentUser = { email: email, name: name, role: "producer" };
+            const currentUser = { email: email, name: name, role: "" };
             fetch(`http://localhost:5000/user/${email}`, {
                 method: "PUT",
                 headers: {
@@ -46,7 +48,7 @@ const Login = () => {
             })
                 .then(res => res.json())
                 .then(data => {
-                    console.log(data)
+     
                 })
 
             navigate("/")
@@ -66,6 +68,7 @@ const Login = () => {
     }
     const onSubmit = (data) => {
         signInWithEmailAndPassword(data.email, data.password);
+        toast.success("logged in success")
     };
 
     return (

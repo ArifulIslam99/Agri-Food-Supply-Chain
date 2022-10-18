@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
+import ReturnUser from './ReturnUser';
 
 const RequestProduct = () => {
+    
     return (
         <div>
-            Request Product Page
+            <h2>Request From Importer</h2>
         </div>
     );
 };
