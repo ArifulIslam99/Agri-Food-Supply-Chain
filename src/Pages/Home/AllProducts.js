@@ -9,11 +9,11 @@ const AllProducts = () => {
     }, [products])
     return (
         <div>
-            <h1 className='text-2xl text-center mb-5 font-bold text-orange-400'>Available Products</h1>
-
+            <h1 className='text-4xl text-center mb-5 font-bold text-orange-700'>Available Products</h1>
+            <div className='columns-3 my-4 '>
             {
-                products.map(pr => <div className='columns-3'>
-                    <div className=" card my-4 w-96 bg-base-100 shadow-xl">
+                products.map(pr => <div >
+                    <div className=" card w-96 bg-base-100 shadow-xl">
                         <figure> 
                         <img src={`data:image/png;base64,${pr.img}`}/>
                         </figure>
@@ -24,14 +24,17 @@ const AllProducts = () => {
                             </h2>
                             <p>Price: {pr.price} / {pr.unit}</p>
                             <p>Seller: {pr.seller}</p>
-                            {/* <div className="card-actions justify-end">
-                                <div className="badge badge-outline">Fashion</div>
+                            <div className="card-actions justify-end">
+                                <div className="badge badge-outline"> {pr.status} </div>
                                 <div className="badge badge-outline">Products</div>
-                            </div> */}
+                            </div>
                         </div>
                     </div>
                 </div>)
             }
+            </div>
+
+      
         </div>
     );
 };
