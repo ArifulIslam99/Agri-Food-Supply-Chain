@@ -11,7 +11,6 @@ const ReturnUser = () => {
             .then(data => setPerson(data))
     }, [user])
 
-
     return{ person }
 };
 

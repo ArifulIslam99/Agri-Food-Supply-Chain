@@ -16,6 +16,10 @@ import CreateProduct from './Pages/Dashboard/CreateProduct';
 import RequestProduct from "./Pages/Dashboard/RequestProduct"
 import ApproveRequest from "./Pages/Dashboard/ApproveRequest"
 import Users from './Pages/Dashboard/Users';
+import AllProducts from './Pages/Home/AllProducts';
+import AllLogistics from './Pages/Home/AllLogistics';
+import MyRequest from './Pages/Dashboard/MyRequest';
+import NewCollection from './Pages/ProductAndLogistic/NewCollection';
 
 
 function App() {
@@ -25,6 +29,12 @@ function App() {
         <Navbar />
         <Routes>
           <Route path='/' element={<Home />} />
+          <Route path='/products' element={
+            <RequireAuth>
+              <NewCollection></NewCollection>
+            </RequireAuth>
+          } />
+          <Route path='/logistics' element={<AllLogistics />} />
           <Route path='/about' element={
             <RequireAuth>
               <About />
@@ -42,6 +52,7 @@ function App() {
             <Route path="createproduct" element={<CreateProduct></CreateProduct>}></Route>
             <Route path="requestproduct" element={<RequestProduct></RequestProduct>}></Route>
             <Route path="users" element={<Users></Users>}></Route>
+            <Route path="myrequests" element={<MyRequest></MyRequest>}></Route>
             <Route path="approverequest" element={<ApproveRequest></ApproveRequest>}></Route>
           </Route>
 

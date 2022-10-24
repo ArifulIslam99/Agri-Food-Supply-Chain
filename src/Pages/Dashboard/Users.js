@@ -1,4 +1,6 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
 
 const Users = () => {
 
@@ -8,9 +10,47 @@ const Users = () => {
       .then(res => res.json())
       .then(data => setUsers(data))
   }, [users])
+
+  const makeAdmin = email => {
+    const admin = { email: email }
+    axios.put('http://localhost:5000/users/admin', admin)
+      .then(res => {
+        console.log(res)
+        if (res.data.modifiedCount) {
+          toast.success("Admin made successfull!")
+
+        }
+        else {
+          toast.error("Action Unsuccessfull")
+        }
+
+
+      })
+
+  }
+
+  const removeUser = email => {
+    const procced = window.confirm("Are You Sure to Delete User?")
+
+
+    if (procced) {
+        fetch(`http://localhost:5000/users/${email}`, {
+          method: "DELETE"
+        })
+        .then(res =>  res.json())
+        .then(data =>{
+          if(data.deletedCount > 0) 
+               {
+                  toast.info("User Removed!")
+                  
+               } 
+        })
+    }
+  }
   return (
     <div>
-      <h2 className='text-2xl text-center text-red-400 font-bold'>Total Users: {users.length} </h2>
+      <ToastContainer></ToastContainer>
+      <h2 className='text-4xl mb-5 text-center text-red-400 font-bold'>Total Users: {users.length} </h2>
       <div className="overflow-x-auto">
         <table className="table w-full">
 
@@ -19,6 +59,8 @@ const Users = () => {
               <th>Name</th>
               <th>Email</th>
               <th>Role</th>
+              <th></th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -29,6 +71,8 @@ const Users = () => {
                 <td>{user.name} </td>
                 <td> {user.email}</td>
                 <td>{user.role}</td>
+                <td> {user.role !== "admin" && <button onClick={() => makeAdmin(user.email)} className='btn btn-outline btn-accent'>Make admin</button>} </td>
+                <td> {user.role !== "admin" && <button onClick={() => removeUser(user.email)} className='btn btn-outline btn-error'>Remove User</button>} </td>
               </tr>
               )
             }

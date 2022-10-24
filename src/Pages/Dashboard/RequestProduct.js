@@ -5,7 +5,7 @@ const RequestProduct = () => {
     
     return (
         <div>
-            <h2>Request From Importer</h2>
+            <h2>Request to producer</h2>
         </div>
     );
 };
