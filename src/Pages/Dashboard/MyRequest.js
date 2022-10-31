@@ -13,7 +13,7 @@ const MyRequest = () => {
   const finalizeReqest = async (id, contactAdrees) => {
     const accounts = await web3.eth.getAccounts();
     const request = Request(contactAdrees);
-
+    let sellFlag = false;
 
     try {
       setLoading(true)
@@ -22,21 +22,24 @@ const MyRequest = () => {
           from: accounts[0]
         });
       toast.success("Transaction Successful. Requeest Send");
+      sellFlag = true;
     } catch (err) {
       setLoading(false)
       toast.error(err.message)
     }
     finally {
       setLoading(false)
+      if (sellFlag) {
 
-      fetch(`http://localhost:5000/product/sold/${id}`, {
-        method: 'PUT'
-      }).then(res => res.json())
-        .then(data => {
-          if (data.modifiedCount > 0) {
-            toast.success("Product sold");
-          }
-        })
+        fetch(`http://localhost:5000/product/sold/${id}`, {
+          method: 'PUT'
+        }).then(res => res.json())
+          .then(data => {
+            if (data.modifiedCount > 0) {
+              toast.success("Product sold");
+            }
+          })
+      }
     }
   }
 
@@ -80,7 +83,7 @@ const MyRequest = () => {
                 <td>{product.status}</td>
                 <td>{product?.retailerAdress?.slice(0, 10)}...</td>
                 <td> {product?.logisticAdress?.slice(0, 10)}...</td>
-                <td><button onClick={() => finalizeReqest(product._id, product.contractAddress)} className='btn btn-outline btn-sm btn-success'>Confirm </button></td>
+                <td>{(!product.sell_status) && <button onClick={() => finalizeReqest(product._id, product.contractAddress)} className='btn btn-outline btn-sm btn-success'>Confirm </button>}  </td>
 
               </tr>
               )
