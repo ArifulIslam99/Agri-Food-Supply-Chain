@@ -20,9 +20,11 @@ import AllProducts from './Pages/Home/AllProducts';
 import AllLogistics from './Pages/Home/AllLogistics';
 import MyRequest from './Pages/Dashboard/MyRequest';
 import NewCollection from './Pages/ProductAndLogistic/NewCollection';
+import web3 from './Ethereum/web3';
 
 
 function App() {
+  
   return (
     <div className='max-w-7xl mx-auto'>
       <div>

@@ -4,10 +4,16 @@ import { toast, ToastContainer } from 'react-toastify';
 import auth from '../../firebase.init';
 import useProduct from '../../hooks/useProduct';
 import ReturnUser from '../Dashboard/ReturnUser';
+import Request from "../../Ethereum/request";
+import web3 from '../../Ethereum/web3';
+
+
 const NewCollection = () => {
 
-    const [user, loading, error] = useAuthState(auth);
+    const [user, error] = useAuthState(auth);
     const [person, setPerson] = useState([]);
+    const [loading, setLoading] = useState(false);
+
     useEffect(() => {
         fetch(`http://localhost:5000/user/${user.email}`)
             .then(res => res.json())
@@ -17,22 +23,72 @@ const NewCollection = () => {
     const { products } = useProduct();
     let approvedProduct = [];
 
-    const logisticRequest = id => {
-        fetch(`http://localhost:5000/product/addlogistic/${id}`, {
+    const logisticRequest = async (id, contactAdrees) => {
+        const accounts = await web3.eth.getAccounts();
+        const request = Request(contactAdrees);
+        console.log(contactAdrees);
+
+        try {
+            setLoading(true)
+            await request.methods.logisticReqest(0)
+                .send({
+                    from: accounts[0]
+                });
+            toast.success("Transaction Successful. Requeest Send");
+        } catch (err) {
+            setLoading(false)
+            toast.error(err.message)
+        }
+        finally {
+            setLoading(false)
+            fetch(`http://localhost:5000/product/addlogistic/${id}`, {
             method: 'PUT',
             headers: {
                 "content-type": "application/json"
             },
-            body: JSON.stringify({email: user.email})
+            body: JSON.stringify({ logisticAdress: accounts[0]})
         }).then(res => res.json())
             .then(data => {
                 if (data.modifiedCount > 0) {
-                    toast.success("Request Send.")
+                  
                 }
             })
+        }
+
+        
     }
-    const retailRequest = id => {
-       
+    const retailRequest = async (id, contactAdrees) => {
+        const accounts = await web3.eth.getAccounts();
+        const request = Request(contactAdrees);
+        console.log(contactAdrees);
+
+        try {
+            setLoading(true)
+            await request.methods.retailerRequest(0)
+                .send({
+                    from: accounts[0]
+                });
+            toast.success("Transaction Successful. Requeest Send");
+        } catch (err) {
+            setLoading(false)
+            toast.error(err.message)
+        }
+        finally {
+            setLoading(false)
+            fetch(`http://localhost:5000/product/addRetailer/${id}`, {
+            method: 'PUT',
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify({ retailerAdress: accounts[0]})
+        }).then(res => res.json())
+            .then(data => {
+                if (data.modifiedCount > 0) {
+                    
+                }
+            })
+        }
+
     }
 
     if (products.length !== null) {
@@ -44,14 +100,12 @@ const NewCollection = () => {
     }
 
     if (!person) {
-        <button type="button" class="bg-indigo-500 ..." disabled>
-            <svg class="animate-spin h-5 w-5 mr-3 ..." viewBox="0 0 24 24">
-            </svg>
-            Processing...
-        </button>
+        <button className="btn loading btn-success"> loading</button>
     }
     return (
+
         <div className='mt-12'>
+            <ToastContainer></ToastContainer>
             <h1 className='text-4xl text-center mb-5 font-bold text-orange-700'>Available Products</h1>
             <div className='grid lg:grid-cols-3 sm:grid-cols-1  gap-4 my-4 '>
                 {
@@ -68,17 +122,27 @@ const NewCollection = () => {
                                 <p>Price: {pr.price}Tk/ {pr.unit}</p>
                                 <p>Seller: {pr.seller}</p>
                                 <div className="card-actions justify-end">
-                                    {(person.role === "logistic") ? <button onClick={() => logisticRequest(pr._id)} className="btn btn-warning btn-sm">Logistic Request</button> :
-                                        <button onClick={() => retailRequest(pr._id)} className="btn btn-warning btn-sm">Retail Request</button>
+
+                                    {(person.role === "logistic") && <button onClick={() => logisticRequest(pr._id, pr.contractAddress)} className="btn btn-warning btn-sm">Logistic Request</button>
+
+                                    }
+                                    {
+                                        (person.role == "importer") &&
+                                        <button onClick={() => retailRequest(pr._id, pr.contractAddress)} className="btn btn-warning btn-sm">Retail Request</button>
                                     }
                                 </div>
                             </div>
+
                         </div>
+
                     </div>)
                 }
             </div>
 
-         <ToastContainer/>
+            {
+                (loading) && <button className="btn loading btn-success m-5">Transaction loading</button>
+            }
+            <ToastContainer />
         </div>
     );
 };
