@@ -30,6 +30,7 @@ const Dashboard = () => {
             <div>
               <li><Link to="/dashboard/users">All Users</Link></li>
               <li><Link to="/dashboard/approverequest">Approve Request</Link></li>
+              <li><Link to="/dashboard/contracts">All Contracts</Link></li>
             </div>
           }
           {

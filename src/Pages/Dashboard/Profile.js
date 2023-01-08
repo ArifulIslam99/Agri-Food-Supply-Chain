@@ -39,7 +39,7 @@ const Profile = () => {
         <div className='columns-2'>
             <div className="avatar ">
                 <div className="w-64  rounded-xl">
-                    <img src="https://placeimg.com/192/192/people" />
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTX_f85ZIKbshI9Sy5ZfGbozaNpTs4Qly4pDg&usqp=CAU" />
                 </div>
             </div>
 

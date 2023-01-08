@@ -5,7 +5,6 @@ import { Route, Link, Routes } from "react-router-dom";
 import Home from './Pages/Home/Home';
 import About from './Pages/About/About';
 import Login from './Pages/Login/Login';
-import Footer from './Pages/Shared/Footer';
 import SignUp from './Pages/Login/SignUp';
 import RequireAuth from './Pages/Login/RequireAuth';
 import Dashboard from './Pages/Dashboard/Dashboard';
@@ -21,6 +20,7 @@ import AllLogistics from './Pages/Home/AllLogistics';
 import MyRequest from './Pages/Dashboard/MyRequest';
 import NewCollection from './Pages/ProductAndLogistic/NewCollection';
 import web3 from './Ethereum/web3';
+import Contracts from './Pages/Dashboard/Contracts';
 
 
 function App() {
@@ -55,6 +55,7 @@ function App() {
             <Route path="requestproduct" element={<RequestProduct></RequestProduct>}></Route>
             <Route path="users" element={<Users></Users>}></Route>
             <Route path="myrequests" element={<MyRequest></MyRequest>}></Route>
+            <Route path="contracts" element={<Contracts></Contracts>}></Route>
             <Route path="approverequest" element={<ApproveRequest></ApproveRequest>}></Route>
           </Route>
 
@@ -62,7 +63,7 @@ function App() {
           <Route path='/signup' element={<SignUp />} />
         </Routes>
       </div>
-      <Footer></Footer>
+      
     </div>
   );
 }

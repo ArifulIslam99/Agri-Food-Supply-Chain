@@ -1,5 +1,5 @@
 import React from 'react';
-import fruits from "../../images/fruits_home.jpeg"
+import fruits from "../../images/farmer.webp"
 
 const Banner = () => {
     return (
